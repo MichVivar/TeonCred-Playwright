@@ -5,6 +5,11 @@ on:
   pull_request:
     branches: [ main, master ]
 
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
 jobs:
   test:
     timeout-minutes: 60
@@ -26,10 +31,9 @@ jobs:
 
     - name: Run Playwright tests
       run: npx playwright test
-      # Esto permite que el flujo siga aunque un test falle, 
-      # así siempre tendremos el PDF del error.
       continue-on-error: true
 
+    # PASO 1: Subir tus PDFs como artefactos (para descarga)
     - name: Upload Evidence PDF
       if: always()
       uses: actions/upload-artifact@v4
@@ -37,3 +41,13 @@ jobs:
         name: reporte-evidencias-pdf
         path: target/Evidencias_PDF/
         retention-days: 7
+
+    # PASO 2: Publicar el reporte técnico en GitHub Pages
+    - name: Deploy Playwright Report to GitHub Pages
+      if: always()
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./playwright-report
+        user_name: 'github-actions[bot]'
+        user_email: 'github-actions[bot]@users.noreply.github.com'
