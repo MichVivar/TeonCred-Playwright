@@ -29,29 +29,21 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
 
-    - name: Run Playwright tests
-      run: npx playwright test
+    # CAMBIO 1: Usamos 'npm test' para que se dispare el posttest (consolidar.js)
+    - name: Run Playwright tests & Consolidate
+      run: npm test
       continue-on-error: true
 
-    
-    - name: Upload Playwright HTML Report
+    # CAMBIO 2: Subimos UNA SOLA CARPETA (la que ya tiene PDFs y Gráficas adentro)
+    - name: Upload Full Evidence Package (PDF + HTML)
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: playwright-report-graficas
-        path: playwright-report/
-        retention-days: 7
-
-    
-    - name: Upload Evidence PDF
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: reporte-evidencias-pdf
+        name: Paquete-Completo-Evidencias-Ciclo
         path: target/Evidencias_PDF/
         retention-days: 7
 
-    
+    # Este se queda igual por si quieres ver la última corrida rápido en la web
     - name: Deploy Playwright Report to Pages
       if: always()
       uses: peaceiris/actions-gh-pages@v3

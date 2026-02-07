@@ -44,4 +44,4 @@ Tras cada ejecución en el Pipeline de CI/CD, se generan los siguientes resultad
    npx playwright install
 
 4. Ejecutar las pruebas
-   npx playwright test
+   npm test

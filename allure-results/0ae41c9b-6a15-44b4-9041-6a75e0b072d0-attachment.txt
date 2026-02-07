@@ -1,0 +1,1 @@
+[Evidence] Copia del reporte interactivo creada en: target/Evidencias_PDF/07-02-2026-001/test-report-interactive
