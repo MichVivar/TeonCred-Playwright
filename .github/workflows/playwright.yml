@@ -33,7 +33,16 @@ jobs:
       run: npx playwright test
       continue-on-error: true
 
-    # PASO 1: Subir tus PDFs como artefactos (para descarga)
+    
+    - name: Upload Playwright HTML Report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: playwright-report-graficas
+        path: playwright-report/
+        retention-days: 7
+
+    
     - name: Upload Evidence PDF
       if: always()
       uses: actions/upload-artifact@v4
@@ -42,12 +51,10 @@ jobs:
         path: target/Evidencias_PDF/
         retention-days: 7
 
-    # PASO 2: Publicar el reporte técnico en GitHub Pages
-    - name: Deploy Playwright Report to GitHub Pages
+    
+    - name: Deploy Playwright Report to Pages
       if: always()
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./playwright-report
-        user_name: 'github-actions[bot]'
-        user_email: 'github-actions[bot]@users.noreply.github.com'
